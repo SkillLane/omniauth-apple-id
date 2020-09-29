@@ -5,7 +5,7 @@ require 'net/https'
 
 module OmniAuth
   module Strategies
-    class Appleskilllane < OmniAuth::Strategies::OAuth2
+    class Apple < OmniAuth::Strategies::OAuth2
       option :name, 'apple'
 
       option :client_options,
