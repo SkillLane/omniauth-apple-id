@@ -64,7 +64,7 @@ module OmniAuth
                          iss: 'https://appleid.apple.com',
                          verify_iat: true,
                          verify_aud: true,
-                         aud: [options.client_id].concat(options.authorized_client_ids),
+                         aud: options.client_id,
                          algorithms: ['RS256'],
                          jwks: fetch_jwks
                        }
