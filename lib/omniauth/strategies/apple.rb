@@ -59,16 +59,16 @@ module OmniAuth
       def id_info
         @id_info ||= if request.params&.key?('id_token') || access_token&.params&.key?('id_token')
                        id_token = request.params['id_token'] || access_token.params['id_token']
-                       jwt_options = {
-                         verify_iss: true,
-                         iss: 'https://appleid.apple.com',
-                         verify_iat: true,
-                         verify_aud: true,
-                         aud: options.client_id,
-                         algorithms: ['RS256'],
-                         jwks: fetch_jwks
-                       }
-                       payload, _header = ::JWT.decode(id_token, nil, false, jwt_options)
+                      #  jwt_options = {
+                      #    verify_iss: true,
+                      #    iss: 'https://appleid.apple.com',
+                      #    verify_iat: true,
+                      #    verify_aud: true,
+                      #    aud: [options.client_id].concat(options.authorized_client_ids),
+                      #    algorithms: ['RS256'],
+                      #    jwks: fetch_jwks
+                      #  }
+                       payload, _header = ::JWT.decode(id_token, nil, false)
                        verify_nonce!(payload)
                        payload
                      end
