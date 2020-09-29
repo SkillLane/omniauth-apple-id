@@ -68,9 +68,11 @@ module OmniAuth
                       #    algorithms: ['RS256'],
                       #    jwks: fetch_jwks
                       #  }
-                       payload, _header = ::JWT.decode(id_token, nil, false)
-                       verify_nonce!(payload)
-                       payload
+                      #  payload, _header = ::JWT.decode(id_token, nil, false)
+                       payload = JWT.decode(id_token, nil, false)[0]
+
+                      #  verify_nonce!(payload)
+                       return payload
                      end
       end
 
