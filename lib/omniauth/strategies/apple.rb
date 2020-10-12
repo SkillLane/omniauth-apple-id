@@ -58,7 +58,7 @@ module OmniAuth
 
       def id_info
         @id_info ||= if request.params&.key?('id_token') || access_token&.params&.key?('id_token')
-                       key = request.params&.key || access_token&.params&.key
+                       key = request.params&.key.present? request.params&.key : access_token&.params&.key
                        id_token = request.params['id_token'] || access_token.params['id_token']
                        jwt_options = {
                          verify_iss: true,
