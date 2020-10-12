@@ -58,7 +58,6 @@ module OmniAuth
 
       def id_info
         @id_info ||= if request.params&.key?('id_token') || access_token&.params&.key?('id_token')
-                       key = request.params&.key.present? ? request.params&.key : access_token&.params&.key
                        id_token = request.params['id_token'] || access_token.params['id_token']
                        jwt_options = {
                          verify_iss: true,
@@ -69,7 +68,18 @@ module OmniAuth
                          algorithms: ['RS256'],
                          jwks: fetch_jwks
                        }
-                       payload, _header = ::JWT.decode(id_token, key, true, jwt_options)
+
+                       header_segment = JSON.parse(Base64.decode64(jwt.split(".").first))
+                       alg = header_segment["alg"]
+                       kid = header_segment["kid"]
+                 
+                       apple_response = Net::HTTP.get(URI.parse("https://appleid.apple.com/auth/keys"))
+                       apple_certificate = JSON.parse(apple_response)
+                 
+                       keyHash = ActiveSupport::HashWithIndifferentAccess.new(apple_certificate["keys"].select {|key| key["kid"] == kid}[0])
+                       jwk = JWT::JWK.import(keyHash)
+
+                       payload, _header = ::JWT.decode(id_token, jwk.public_key, true, jwt_options)
 
                        verify_nonce!(payload)
                        payload
