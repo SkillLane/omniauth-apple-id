@@ -69,7 +69,7 @@ module OmniAuth
                          jwks: fetch_jwks
                        }
 
-                       header_segment = JSON.parse(Base64.decode64(jwt.split(".").first))
+                       header_segment = JSON.parse(Base64.decode64(id_token.split(".").first))
                        alg = header_segment["alg"]
                        kid = header_segment["kid"]
                  
