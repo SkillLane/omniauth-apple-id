@@ -2,7 +2,6 @@
 
 require 'omniauth-oauth2'
 require 'net/https'
-require 'jwt'
 
 module OmniAuth
   module Strategies
