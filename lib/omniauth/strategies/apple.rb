@@ -79,7 +79,7 @@ module OmniAuth
                        keyHash = ActiveSupport::HashWithIndifferentAccess.new(apple_certificate["keys"].select {|key| key["kid"] == kid}[0])
                        jwk = JWT::JWK.import(keyHash)
 
-                       payload, _header = ::JWT.decode(id_token, jwk.public_key, false, jwt_options)
+                       payload, _header = ::JWT.decode(id_token, jwk.public_key, true, jwt_options)
 
                        verify_nonce!(payload)
                        payload
