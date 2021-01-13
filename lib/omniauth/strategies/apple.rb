@@ -69,17 +69,7 @@ module OmniAuth
                          jwks: fetch_jwks
                        }
 
-                       header_segment = JSON.parse(Base64.decode64(id_token.split(".").first))
-                       alg = header_segment["alg"]
-                       kid = header_segment["kid"]
-                 
-                       apple_response = Net::HTTP.get(URI.parse("https://appleid.apple.com/auth/keys"))
-                       apple_certificate = JSON.parse(apple_response)
-                 
-                       keyHash = ActiveSupport::HashWithIndifferentAccess.new(apple_certificate["keys"].select {|key| key["kid"] == kid}[0])
-                       jwk = JWT::JWK.import(keyHash)
-
-                       payload, _header = ::JWT.decode(id_token, jwk.public_key, true, jwt_options)
+                       payload, _header = ::JWT.decode(id_token, nil, true, jwt_options)
 
                        verify_nonce!(payload)
                        payload
